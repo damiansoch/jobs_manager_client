@@ -1,1 +1,8 @@
-
+a {
+  text-decoration: none !important;
+  color: black !important;
+  transition: 0.2s all ease-in-out;
+}
+a:hover {
+  color: gray !important;
+}
