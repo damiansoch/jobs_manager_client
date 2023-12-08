@@ -6,3 +6,10 @@ a {
 a:hover {
   color: gray !important;
 }
+.icon {
+  cursor: pointer;
+  transition: 0.2s all ease-in-out;
+}
+.icon:hover {
+  scale: 1.1;
+}
