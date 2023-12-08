@@ -5,8 +5,14 @@ import {
 } from '../../genericFunctions/converters';
 import TableActionsComponent from './TableActionsComponent';
 
-const TableComponent = ({ data, excludedKeys = [], showActions = true }) => {
-  console.log(data);
+const TableComponent = ({
+  data,
+  excludedKeys = [],
+  showActions = true,
+  detailsActionFunction = undefined,
+  editActionFunction = undefined,
+  deleteActionFunction = undefined,
+}) => {
   //Function to generate the table headers
   const renderTableHeader = () => {
     if (data.length === 0) return null;
@@ -36,7 +42,12 @@ const TableComponent = ({ data, excludedKeys = [], showActions = true }) => {
           ))}
         {showActions && (
           <td>
-            <TableActionsComponent />
+            <TableActionsComponent
+              detailsActionFunction={detailsActionFunction}
+              editActionFunction={editActionFunction}
+              deleteActionFunction={deleteActionFunction}
+              itemId={item.id}
+            />
           </td>
         )}
       </tr>

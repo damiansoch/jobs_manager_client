@@ -8,7 +8,6 @@ export const getCustomers = createAsyncThunk(
     try {
       const endpoint = 'https://localhost:7113/api/Customer';
       const response = await getAxiosFunction(endpoint);
-      console.log(response);
       var isSuccess = isResponceSuccess(response);
       if (!isSuccess) {
         throw new Error(
