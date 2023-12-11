@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getCustomers } from '../../store/customersSlice';
 import SpinnerComponent from '../genericComponent/SpinnerComponent';
@@ -6,8 +6,14 @@ import ResultComponent from '../genericComponent/ResultComponent';
 import TableComponent from '../genericComponent/TableComponent';
 import { deleteAxiosFunction } from '../../genericFunctions/axiosFunctions';
 import { isResponceSuccess } from '../../genericFunctions/functions';
+import ConfirmationModal from '../genericComponent/ConfirmationModal';
 
 const AllCustomers = () => {
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [selectedUserId, setSelectedUserId] = useState('');
+  const [message, setMessage] = useState('');
+  const [isErrorResult, setIsErrorResult] = useState(false);
+
   const excludedKeys = ['id', 'contact', 'jobs', 'addresses'];
   const dispatch = useDispatch();
 
@@ -24,32 +30,74 @@ const AllCustomers = () => {
     console.log(itemId);
   };
   const deleteAction = async (itemId) => {
-    const endpoint = `https://localhost:7113/api/Customer/${itemId}`;
+    setIsErrorResult(false);
+    setSelectedUserId(itemId);
+    setShowConfirmModal(true);
+  };
+
+  //ModalSetup
+  const handleCancel = () => {
+    setShowConfirmModal(false);
+    setSelectedUserId('');
+  };
+  const handleConfirm = async () => {
+    console.log('deleting ' + selectedUserId);
+    const endpoint = `https://localhost:7113/api/Customer/${selectedUserId}`;
     const response = await deleteAxiosFunction(endpoint);
     console.log(response);
-    //const isSuccess = isResponceSuccess(response)
+    const isSuccess = isResponceSuccess(response);
+    if (isSuccess) {
+      setShowConfirmModal(false);
+      setSelectedUserId('');
+      setMessage(response.data);
+      dispatch(getCustomers());
+    } else {
+      setShowConfirmModal(false);
+      setSelectedUserId('');
+      setIsErrorResult(true);
+      if (response.status === 404 && response.data === undefined) {
+        setMessage('Error deleting data');
+      } else {
+        setMessage(response.data);
+      }
+    }
   };
 
   useEffect(() => {
     dispatch(getCustomers());
   }, [dispatch]);
   return (
-    <div>
-      {isLoading && <SpinnerComponent />}
-      {isError ? (
-        <ResultComponent variant='danger' data={errorMessage} />
-      ) : (
-        customers.length > 0 && (
-          <TableComponent
-            data={customers}
-            excludedKeys={excludedKeys}
-            detailsActionFunction={detailAction}
-            editActionFunction={editAction}
-            deleteActionFunction={deleteAction}
-          />
-        )
+    <>
+      {message.length > 0 && (
+        <ResultComponent
+          variant={isErrorResult ? 'danger' : 'success'}
+          data={message}
+        />
       )}
-    </div>
+
+      <div>
+        {isLoading && <SpinnerComponent />}
+        {isError ? (
+          <ResultComponent variant='danger' data={errorMessage} />
+        ) : (
+          customers.length > 0 && (
+            <TableComponent
+              data={customers}
+              excludedKeys={excludedKeys}
+              detailsActionFunction={detailAction}
+              editActionFunction={editAction}
+              deleteActionFunction={deleteAction}
+            />
+          )
+        )}
+      </div>
+      <ConfirmationModal
+        show={showConfirmModal}
+        onHide={handleCancel}
+        onConfirm={handleConfirm}
+        message={'Are you sure?'}
+      />
+    </>
   );
 };
 
