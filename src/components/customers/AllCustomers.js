@@ -7,6 +7,9 @@ import TableComponent from '../genericComponent/TableComponent';
 import { deleteAxiosFunction } from '../../genericFunctions/axiosFunctions';
 import { isResponceSuccess } from '../../genericFunctions/functions';
 import ConfirmationModal from '../genericComponent/ConfirmationModal';
+import { Button, Row } from 'react-bootstrap';
+import { IoIosPersonAdd } from 'react-icons/io';
+import { useNavigate } from 'react-router-dom';
 
 const AllCustomers = () => {
   const [showConfirmModal, setShowConfirmModal] = useState(false);
@@ -16,6 +19,7 @@ const AllCustomers = () => {
 
   const excludedKeys = ['id', 'contact', 'jobs', 'addresses'];
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const { customers, isLoading, isError, errorMessage } = useSelector(
     (state) => state.customers
@@ -26,8 +30,7 @@ const AllCustomers = () => {
     console.log(itemId);
   };
   const editAction = async (itemId) => {
-    console.log('From dedit action');
-    console.log(itemId);
+    navigate(`/addEdit/editCustomer/${itemId}`);
   };
   const deleteAction = async (itemId) => {
     setIsErrorResult(false);
@@ -63,6 +66,10 @@ const AllCustomers = () => {
     }
   };
 
+  const handleAddCustomer = () => {
+    navigate('/addEdit/addCustomer/0');
+  };
+
   useEffect(() => {
     dispatch(getCustomers());
   }, [dispatch]);
@@ -80,15 +87,26 @@ const AllCustomers = () => {
         {isError ? (
           <ResultComponent variant='danger' data={errorMessage} />
         ) : (
-          customers.length > 0 && (
-            <TableComponent
-              data={customers}
-              excludedKeys={excludedKeys}
-              detailsActionFunction={detailAction}
-              editActionFunction={editAction}
-              deleteActionFunction={deleteAction}
-            />
-          )
+          <>
+            <Row>
+              <IoIosPersonAdd
+                className=' col-1 ms-auto mt-5 text-success icon'
+                size={50}
+                onClick={() => {
+                  handleAddCustomer();
+                }}
+              />
+            </Row>
+            {customers.length > 0 && (
+              <TableComponent
+                data={customers}
+                excludedKeys={excludedKeys}
+                detailsActionFunction={detailAction}
+                editActionFunction={editAction}
+                deleteActionFunction={deleteAction}
+              />
+            )}
+          </>
         )}
       </div>
       <ConfirmationModal

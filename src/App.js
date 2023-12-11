@@ -3,6 +3,7 @@ import './App.css';
 import Navigation from './components/navigation/Navigation';
 import AllCustomers from './components/customers/AllCustomers';
 import AllJobs from './components/jobs/AllJobs';
+import AddEditComponent from './components/genericComponent/AddEditComponent';
 
 function App() {
   return (
@@ -11,6 +12,7 @@ function App() {
       <Routes>
         <Route path='/' element={<AllCustomers />} />
         <Route path='/allJobs' element={<AllJobs />} />
+        <Route path='/addEdit/:actionName/:id' element={<AddEditComponent />} />
       </Routes>
     </div>
   );
