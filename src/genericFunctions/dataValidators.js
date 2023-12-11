@@ -1,7 +1,6 @@
 import { convertToLabel } from './converters';
 
 export const validataData = (actionName, data) => {
-  console.log(data);
   let validationRules = {};
   const errors = [];
 
@@ -17,13 +16,13 @@ export const validataData = (actionName, data) => {
         ExtraDetails: {},
       };
       break;
-    // case 'editCustomer':
-    //   validationRules = {
-    //     FirstName: { Required: true, MaxLength: 255 },
-    //     LastName: { Required: true, MaxLength: 255 },
-    //     CompanyName: { Required: true, MaxLength: 255 },
-    //   };
-    //   break;
+    case 'editCustomer':
+      validationRules = {
+        FirstName: { Required: true, MaxLength: 255 },
+        LastName: { Required: true, MaxLength: 255 },
+        CompanyName: { Required: true, MaxLength: 255 },
+      };
+      break;
 
     default:
       errors.push(`Action name ${actionName} not recognized in the validators`);

@@ -26,8 +26,6 @@ const AddEditComponent = () => {
   const [newObject, setNewObject] = useState({});
   const [errors, setErrors] = useState([]);
 
-  console.log(errors);
-
   const { actionName, id } = useParams();
   const navigate = useNavigate();
 
@@ -35,7 +33,7 @@ const AddEditComponent = () => {
     e.preventDefault();
     setErrors([]);
     let errors = validataData(actionName, newObject);
-    if (errors.lenth > 0) {
+    if (errors.length > 0) {
       setErrors(errors);
     } else {
       let endpoint = '';
@@ -74,6 +72,9 @@ const AddEditComponent = () => {
           break;
 
         default:
+          errors.push(
+            `Action name ${actionName} not recognized in handleSubmit`
+          );
           break;
       }
     }
