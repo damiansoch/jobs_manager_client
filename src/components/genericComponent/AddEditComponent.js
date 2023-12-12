@@ -1,9 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import {
-  AddCustomerRequestDto,
-  UpdateCustomerRequestDto,
-} from '../../classes/allClasses';
+import { AddCustomerRequestDto } from '../../classes/allClasses';
 import {
   Button,
   Card,
@@ -17,22 +14,25 @@ import { validataData } from '../../genericFunctions/dataValidators';
 import ResultComponent from './ResultComponent';
 import {
   addAxiosFunction,
-  getAxiosFunction,
   updateAxiosFunction,
 } from '../../genericFunctions/axiosFunctions';
 import { isResponceSuccess } from '../../genericFunctions/functions';
+import { fetchData } from '../../genericFunctions/dataManipulationFunctions';
+import { renderFormControl } from './renderingFunctions/renderingFunctions';
 
 const AddEditComponent = () => {
   const [newObject, setNewObject] = useState({});
   const [errors, setErrors] = useState([]);
 
   const { actionName, id } = useParams();
+
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setErrors([]);
     let errors = validataData(actionName, newObject);
+    console.log(errors);
     if (errors.length > 0) {
       setErrors(errors);
     } else {
@@ -71,6 +71,22 @@ const AddEditComponent = () => {
 
           break;
 
+        case 'editJob':
+          endpoint = `https://localhost:7113/api/Job/${id}`;
+          result = await updateAxiosFunction(endpoint, newObject);
+          isSuccess = isResponceSuccess(result);
+          if (isSuccess) {
+            navigate('/allJobs');
+          } else {
+            if (result.status === 404 && result.data === '') {
+              setErrors('Error updating data');
+            } else {
+              setErrors(result.data);
+            }
+          }
+
+          break;
+
         default:
           errors.push(
             `Action name ${actionName} not recognized in handleSubmit`
@@ -81,44 +97,40 @@ const AddEditComponent = () => {
   };
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
-    setNewObject((prevFormData) => ({ ...prevFormData, [name]: value }));
+    const { name, value, type, checked } = e.target;
+    let newValue = value;
+
+    if (type === 'checkbox') {
+      newValue = checked;
+    } else if (type === 'number') {
+      newValue = parseFloat(value);
+    }
+    setNewObject((prevFormData) => ({ ...prevFormData, [name]: newValue }));
   };
 
   useEffect(() => {
-    const fetchData = async (endpoint) => {
-      const response = await getAxiosFunction(endpoint);
-      const isSuccess = isResponceSuccess(response);
-      if (isSuccess) {
-        let updateCustomerRequestDto = new UpdateCustomerRequestDto();
-        updateCustomerRequestDto.FirstName = response.data.firstName;
-        updateCustomerRequestDto.LastName = response.data.lastName;
-        updateCustomerRequestDto.CompanyName = response.data.companyName;
-        setNewObject(updateCustomerRequestDto);
-      } else {
-        if (response.status === 404 && response.data === '') {
-          setErrors('Error getting data for the customer');
-        } else {
-          setErrors(response.data);
-        }
-      }
-    };
-
+    let endpoint = '';
     switch (actionName) {
       case 'addCustomer':
         const customer = new AddCustomerRequestDto();
         setNewObject(customer);
         break;
       case 'editCustomer':
-        const endpoint = `https://localhost:7113/api/Customer/${id}`;
-        fetchData(endpoint);
+        endpoint = `https://localhost:7113/api/Customer/${id}`;
+        fetchData(actionName, endpoint, setNewObject, setErrors);
+        break;
 
+      case 'editJob':
+        endpoint = `https://localhost:7113/api/Job/${id}`;
+        fetchData(actionName, endpoint, setNewObject, setErrors);
         break;
 
       default:
         break;
     }
   }, [actionName, id]);
+
+  //rendering form control based on the data type
 
   return (
     <Card className=' my-3'>
@@ -137,7 +149,10 @@ const AddEditComponent = () => {
           {Object.keys(newObject).map((key) => (
             <Form.Group key={key}>
               <Form.Label htmlFor={key}>{key}</Form.Label>
-              <Form.Control
+
+              {
+                renderFormControl(key, newObject[key], newObject, handleChange)
+                /* <Form.Control
                 type='text'
                 id={key}
                 name={key}
@@ -145,7 +160,8 @@ const AddEditComponent = () => {
                 onChange={(e) => {
                   handleChange(e);
                 }}
-              />
+              /> */
+              }
             </Form.Group>
           ))}
           <Button className=' my-2' type='submit' variant='primary'>

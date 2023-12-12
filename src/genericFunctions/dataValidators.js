@@ -1,6 +1,8 @@
 import { convertToLabel } from './converters';
 
 export const validataData = (actionName, data) => {
+  console.log(actionName);
+  console.log(data);
   let validationRules = {};
   const errors = [];
 
@@ -21,6 +23,16 @@ export const validataData = (actionName, data) => {
         FirstName: { Required: true, MaxLength: 255 },
         LastName: { Required: true, MaxLength: 255 },
         CompanyName: { Required: true, MaxLength: 255 },
+      };
+      break;
+
+    case 'editJob':
+      validationRules = {
+        Name: { Required: true, MaxLength: 255 },
+        Description: { Required: true },
+        Price: { Required: true, IsNumber: true },
+        Deposit: { Required: true, IsNumber: true },
+        ToBeCompleted: { Required: true, IsDate: true },
       };
       break;
 
@@ -52,6 +64,18 @@ export const validataData = (actionName, data) => {
       if (rules.EmailAddress && data[prop] && !isValidEmail(data[prop])) {
         errors.push(`${convertToLabel(prop)} should be a valid email address`);
       }
+
+      //number
+      if (rules.IsNumber && data[prop] && !isValidNumber(data[prop])) {
+        errors.push(
+          `${convertToLabel(prop)} should be a positive whole number`
+        );
+      }
+
+      //date
+      if (rules.IsDate && data[prop] && !isValidDate(data[prop])) {
+        errors.push(`${convertToLabel(prop)} should be a valid date`);
+      }
     }
   }
   return errors;
@@ -61,4 +85,19 @@ export const validataData = (actionName, data) => {
 const isValidEmail = (email) => {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   return emailRegex.test(email);
+};
+
+//helper function to check if valid positve whole number
+const isValidNumber = (value) => {
+  const positiveWholeNumberRegex = /^(0|[1-9]\d*)$/;
+  return positiveWholeNumberRegex.test(value);
+};
+
+//helper function to check if valid date
+const isValidDate = (dateString) => {
+  const dateRegex = /^\d{4}-\d{2}-\d{2}$/; //YYYY-MM-dd
+  if (!dateRegex.test(dateString)) return false;
+
+  const date = new Date(dateString);
+  return date.toISOString().startsWith(dateString);
 };

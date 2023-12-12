@@ -19,3 +19,13 @@ export class UpdateCustomerRequestDto {
     this.CompanyName = '';
   }
 }
+
+export class UpdateJobRequestDto {
+  constructor() {
+    this.Name = '';
+    this.Description = '';
+    this.Price = 0.0;
+    this.Deposit = 0.0;
+    this.ToBeCompleted = '';
+  }
+}

@@ -7,7 +7,7 @@ import TableComponent from '../genericComponent/TableComponent';
 import { deleteAxiosFunction } from '../../genericFunctions/axiosFunctions';
 import { isResponceSuccess } from '../../genericFunctions/functions';
 import ConfirmationModal from '../genericComponent/ConfirmationModal';
-import { Button, Row } from 'react-bootstrap';
+import { Row } from 'react-bootstrap';
 import { IoIosPersonAdd } from 'react-icons/io';
 import { useNavigate } from 'react-router-dom';
 
@@ -58,7 +58,8 @@ const AllCustomers = () => {
       setShowConfirmModal(false);
       setSelectedUserId('');
       setIsErrorResult(true);
-      if (response.status === 404 && response.data === undefined) {
+
+      if (response.status === 404 && response.data === '') {
         setMessage('Error deleting data');
       } else {
         setMessage(response.data);
