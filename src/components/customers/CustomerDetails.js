@@ -9,10 +9,11 @@ import {
   CardTitle,
   Spinner,
 } from 'react-bootstrap';
-import ResultComponent from './ResultComponent';
-import TabsComponent from './TabsComponent';
+import ResultComponent from '../genericComponent/ResultComponent';
+import TabsComponent from '../genericComponent/TabsComponent';
 
 const CustomerDetails = () => {
+  const excludedKeys = ['id', 'customerId'];
   const [dataTabs, setDataTabs] = useState([]);
 
   const { id } = useParams();
@@ -21,6 +22,16 @@ const CustomerDetails = () => {
   const { customer, isLoading, isError, errorMessage } = useSelector(
     (state) => state.details
   );
+
+  const detailAction = async (itemId) => {
+    console.log(itemId);
+  };
+  const editAction = async (itemId) => {
+    console.log(itemId);
+  };
+  const deleteAction = async (itemId) => {
+    console.log(itemId);
+  };
   useEffect(() => {
     if (id !== undefined) {
       disatch(getCustomerDetais(id));
@@ -30,8 +41,8 @@ const CustomerDetails = () => {
   useEffect(() => {
     if (Object.keys(customer).length > 0) {
       const tabs = [];
-      tabs.push({ title: 'Addresses', data: customer.addresses });
       tabs.push({ title: 'Contact', data: customer.contact });
+      tabs.push({ title: 'Addresses', data: customer.addresses });
       tabs.push({ title: 'Jobs', data: customer.jobs });
 
       setDataTabs(tabs);
@@ -56,7 +67,13 @@ const CustomerDetails = () => {
                 </CardTitle>
               </CardHeader>
               <CardBody>
-                <TabsComponent dataTabs={dataTabs} />
+                <TabsComponent
+                  dataTabs={dataTabs}
+                  detailsActionFunction={detailAction}
+                  editActionFunction={editAction}
+                  deleteActionFunction={deleteAction}
+                  excludedKeys={excludedKeys}
+                />
               </CardBody>
             </Card>
           )}

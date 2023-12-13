@@ -13,7 +13,6 @@ const TableComponent = ({
   editActionFunction = undefined,
   deleteActionFunction = undefined,
 }) => {
-  console.log(data);
   //Function to generate the table headers
   const renderTableHeader = () => {
     if (data.length === 0) return null;

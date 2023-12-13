@@ -4,7 +4,7 @@ import Navigation from './components/navigation/Navigation';
 import AllCustomers from './components/customers/AllCustomers';
 import AllJobs from './components/jobs/AllJobs';
 import AddEditComponent from './components/genericComponent/AddEditComponent';
-import CustomerDetails from './components/genericComponent/CustomerDetails';
+import CustomerDetails from './components/customers/CustomerDetails';
 
 function App() {
   return (
