@@ -8,14 +8,13 @@ import {
   CardHeader,
   CardTitle,
   Spinner,
-  Tabs,
-  Tab,
 } from 'react-bootstrap';
 import ResultComponent from './ResultComponent';
+import TabsComponent from './TabsComponent';
 
 const CustomerDetails = () => {
   const [dataTabs, setDataTabs] = useState([]);
-  console.log(dataTabs);
+
   const { id } = useParams();
   const disatch = useDispatch();
 
@@ -33,7 +32,7 @@ const CustomerDetails = () => {
       const tabs = [];
       tabs.push({ title: 'Addresses', data: customer.addresses });
       tabs.push({ title: 'Contact', data: customer.contact });
-      tabs.push({ title: 'AddJobsress', data: customer.jobs });
+      tabs.push({ title: 'Jobs', data: customer.jobs });
 
       setDataTabs(tabs);
     }
@@ -57,7 +56,7 @@ const CustomerDetails = () => {
                 </CardTitle>
               </CardHeader>
               <CardBody>
-                <Tabs defaultActiveKey='0' id='data-tabs'></Tabs>
+                <TabsComponent dataTabs={dataTabs} />
               </CardBody>
             </Card>
           )}
