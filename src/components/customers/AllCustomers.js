@@ -26,8 +26,7 @@ const AllCustomers = () => {
   );
 
   const detailAction = async (itemId) => {
-    console.log('From details action');
-    console.log(itemId);
+    navigate(`/details/${itemId}`);
   };
   const editAction = async (itemId) => {
     navigate(`/addEdit/editCustomer/${itemId}`);

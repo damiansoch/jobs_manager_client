@@ -23,6 +23,21 @@ const AllJobs = () => {
     navigate(`/addEdit/editJob/${jobId}`);
   };
 
+  const detailAction = async (jobId) => {
+    const endpoint = `https://localhost:7113/api/Job/${jobId}`;
+    const result = await getAxiosFunction(endpoint);
+    const isSuccess = isResponceSuccess(result);
+    if (isSuccess) {
+      navigate(`/details/${result.data.customerId}`);
+    } else {
+      if (result.status === 404 && result.data === '') {
+        setMessage('Error fetching job data');
+      } else {
+        setMessage(result.data);
+      }
+    }
+  };
+
   const deleteAction = async (jobId) => {
     setIsErrorResult(false);
     setMessage([]);
@@ -90,7 +105,7 @@ const AllJobs = () => {
             <TableComponent
               data={allJobs}
               excludedKeys={excludedKeys}
-              //detailsActionFunction={detailAction}
+              detailsActionFunction={detailAction}
               editActionFunction={editAction}
               deleteActionFunction={deleteAction}
             />
