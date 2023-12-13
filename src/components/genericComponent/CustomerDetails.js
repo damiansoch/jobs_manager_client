@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { getCustomerDetais } from '../../store/customerDetaisSlice';
@@ -14,18 +14,30 @@ import {
 import ResultComponent from './ResultComponent';
 
 const CustomerDetails = () => {
+  const [dataTabs, setDataTabs] = useState([]);
+  console.log(dataTabs);
   const { id } = useParams();
   const disatch = useDispatch();
 
   const { customer, isLoading, isError, errorMessage } = useSelector(
     (state) => state.details
   );
-  console.log(customer);
   useEffect(() => {
     if (id !== undefined) {
       disatch(getCustomerDetais(id));
     }
   }, [id, disatch]);
+
+  useEffect(() => {
+    if (Object.keys(customer).length > 0) {
+      const tabs = [];
+      tabs.push({ title: 'Addresses', data: customer.addresses });
+      tabs.push({ title: 'Contact', data: customer.contact });
+      tabs.push({ title: 'AddJobsress', data: customer.jobs });
+
+      setDataTabs(tabs);
+    }
+  }, [customer]);
   return (
     <>
       {isLoading && <Spinner />}
