@@ -12,7 +12,10 @@ import {
 import ResultComponent from '../genericComponent/ResultComponent';
 import TabsComponent from '../genericComponent/TabsComponent';
 import { searchIdInDataTabs } from './functions/helperFunctions';
-import { deleteAxiosFunction } from '../../genericFunctions/axiosFunctions';
+import {
+  deleteAxiosFunction,
+  getAxiosFunction,
+} from '../../genericFunctions/axiosFunctions';
 import { isResponceSuccess } from '../../genericFunctions/functions';
 import ConfirmationModal from '../genericComponent/ConfirmationModal';
 
@@ -34,7 +37,7 @@ const CustomerDetails = () => {
     console.log(itemId);
   };
   const editAction = async (itemId) => {
-    console.log(itemId);
+    const foundObj = searchIdInDataTabs(dataTabs, itemId);
   };
   const deleteAction = async (itemId) => {
     setMessage('');
