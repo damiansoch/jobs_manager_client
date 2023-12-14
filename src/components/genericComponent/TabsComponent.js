@@ -22,6 +22,7 @@ const TabsComponent = ({
                   detailsActionFunction={detailsActionFunction}
                   editActionFunction={editActionFunction}
                   deleteActionFunction={deleteActionFunction}
+                  areTabs={true}
                 />
               ) : (
                 <TableComponent
@@ -30,6 +31,7 @@ const TabsComponent = ({
                   detailsActionFunction={detailsActionFunction}
                   editActionFunction={editActionFunction}
                   deleteActionFunction={deleteActionFunction}
+                  areTabs={true}
                 />
               )}
             </Tab>

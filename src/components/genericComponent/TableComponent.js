@@ -12,6 +12,7 @@ const TableComponent = ({
   detailsActionFunction = undefined,
   editActionFunction = undefined,
   deleteActionFunction = undefined,
+  areTabs = false,
 }) => {
   //Function to generate the table headers
   const renderTableHeader = () => {
@@ -47,6 +48,8 @@ const TableComponent = ({
               editActionFunction={editActionFunction}
               deleteActionFunction={deleteActionFunction}
               itemId={item.id}
+              isContactTab={item.email !== undefined ? true : false}
+              areTabs={areTabs}
             />
           </td>
         )}

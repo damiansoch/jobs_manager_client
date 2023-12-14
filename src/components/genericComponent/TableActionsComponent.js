@@ -7,6 +7,8 @@ const TableActionsComponent = ({
   editActionFunction,
   deleteActionFunction,
   itemId,
+  isContactTab = false,
+  areTabs,
 }) => {
   const handleClick = (action) => {
     switch (action) {
@@ -35,20 +37,24 @@ const TableActionsComponent = ({
   };
   return (
     <div className=' d-flex align-items-center justify-content-evenly'>
-      <TbListDetails
-        onClick={() => handleClick('details')}
-        size={30}
-        className=' text-info icon'
-      />
+      {!areTabs && (
+        <TbListDetails
+          onClick={() => handleClick('details')}
+          size={30}
+          className=' text-info icon'
+        />
+      )}
+
       <BiSolidEdit
         onClick={() => handleClick('edit')}
         size={30}
         className=' text-warning icon'
       />
       <MdDeleteForever
-        onClick={() => handleClick('delete')}
+        onClick={() => !isContactTab && handleClick('delete')}
         size={30}
         className=' text-danger icon'
+        style={{ cursor: isContactTab && 'not-allowed' }}
       />
     </div>
   );
