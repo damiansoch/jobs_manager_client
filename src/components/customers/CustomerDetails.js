@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { getCustomerDetais } from '../../store/customerDetaisSlice';
 import {
   Card,
@@ -11,13 +11,18 @@ import {
 } from 'react-bootstrap';
 import ResultComponent from '../genericComponent/ResultComponent';
 import TabsComponent from '../genericComponent/TabsComponent';
+import { searchIdInDataTabs } from './functions/helperFunctions';
+import { deleteAxiosFunction } from '../../genericFunctions/axiosFunctions';
+import { isResponceSuccess } from '../../genericFunctions/functions';
 
 const CustomerDetails = () => {
   const excludedKeys = ['id', 'customerId'];
   const [dataTabs, setDataTabs] = useState([]);
+  const [message, setMessage] = useState([]);
 
   const { id } = useParams();
   const disatch = useDispatch();
+  const navigate = useNavigate();
 
   const { customer, isLoading, isError, errorMessage } = useSelector(
     (state) => state.details
@@ -30,7 +35,24 @@ const CustomerDetails = () => {
     console.log(itemId);
   };
   const deleteAction = async (itemId) => {
-    console.log(itemId);
+    const foundObj = searchIdInDataTabs(dataTabs, itemId);
+    if (foundObj === null) {
+      console.log('Id not found');
+    } else {
+      const endpoint = `https://localhost:7113/api/${foundObj.title}/${foundObj.id}`;
+      const result = await deleteAxiosFunction(endpoint);
+      console.log(result);
+      const isSuccess = isResponceSuccess(result);
+      if (isSuccess) {
+        navigate(`/details/${id}`);
+      } else {
+        if (result.status === 404 && result.data === '') {
+          setMessage(`Error deleting ${foundObj.title.toLowerCase()} data`);
+        } else {
+          setMessage(result.data);
+        }
+      }
+    }
   };
   useEffect(() => {
     if (id !== undefined) {
@@ -50,6 +72,9 @@ const CustomerDetails = () => {
   }, [customer]);
   return (
     <>
+      {message.length > 0 && (
+        <ResultComponent variant='danger' data={message} />
+      )}
       {isLoading && <Spinner />}
       {isError ? (
         <ResultComponent variant='danger' data={errorMessage} />
