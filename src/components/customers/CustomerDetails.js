@@ -22,7 +22,6 @@ const CustomerDetails = () => {
 
   const { id } = useParams();
   const disatch = useDispatch();
-  const navigate = useNavigate();
 
   const { customer, isLoading, isError, errorMessage } = useSelector(
     (state) => state.details
@@ -44,9 +43,9 @@ const CustomerDetails = () => {
       console.log(result);
       const isSuccess = isResponceSuccess(result);
       if (isSuccess) {
-        navigate(`/details/${id}`);
+        disatch(getCustomerDetais(id));
       } else {
-        if (result.status === 404 && result.data === '') {
+        if (result.status > 400 && result.data === '') {
           setMessage(`Error deleting ${foundObj.title.toLowerCase()} data`);
         } else {
           setMessage(result.data);
