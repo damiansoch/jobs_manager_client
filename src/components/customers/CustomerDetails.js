@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { getCustomerDetais } from '../../store/customerDetaisSlice';
 import {
   Card,
@@ -14,11 +14,14 @@ import TabsComponent from '../genericComponent/TabsComponent';
 import { searchIdInDataTabs } from './functions/helperFunctions';
 import { deleteAxiosFunction } from '../../genericFunctions/axiosFunctions';
 import { isResponceSuccess } from '../../genericFunctions/functions';
+import ConfirmationModal from '../genericComponent/ConfirmationModal';
 
 const CustomerDetails = () => {
   const excludedKeys = ['id', 'customerId'];
   const [dataTabs, setDataTabs] = useState([]);
   const [message, setMessage] = useState([]);
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [selectedItemId, setSelectedItemId] = useState('');
 
   const { id } = useParams();
   const disatch = useDispatch();
@@ -34,24 +37,9 @@ const CustomerDetails = () => {
     console.log(itemId);
   };
   const deleteAction = async (itemId) => {
-    const foundObj = searchIdInDataTabs(dataTabs, itemId);
-    if (foundObj === null) {
-      console.log('Id not found');
-    } else {
-      const endpoint = `https://localhost:7113/api/${foundObj.title}/${foundObj.id}`;
-      const result = await deleteAxiosFunction(endpoint);
-      console.log(result);
-      const isSuccess = isResponceSuccess(result);
-      if (isSuccess) {
-        disatch(getCustomerDetais(id));
-      } else {
-        if (result.status > 400 && result.data === '') {
-          setMessage(`Error deleting ${foundObj.title.toLowerCase()} data`);
-        } else {
-          setMessage(result.data);
-        }
-      }
-    }
+    setMessage('');
+    setSelectedItemId(itemId);
+    setShowConfirmModal(true);
   };
   useEffect(() => {
     if (id !== undefined) {
@@ -69,6 +57,35 @@ const CustomerDetails = () => {
       setDataTabs(tabs);
     }
   }, [customer]);
+  //ModalSetup
+  const handleCancel = () => {
+    setSelectedItemId('');
+    setShowConfirmModal(false);
+  };
+  const handleConfirm = async () => {
+    const foundObj = searchIdInDataTabs(dataTabs, selectedItemId);
+    if (foundObj === null) {
+      setMessage('Id not found');
+    } else {
+      const endpoint = `https://localhost:7113/api/${foundObj.title}/${foundObj.id}`;
+      const result = await deleteAxiosFunction(endpoint);
+      console.log(result);
+      const isSuccess = isResponceSuccess(result);
+      if (isSuccess) {
+        setSelectedItemId('');
+        setShowConfirmModal(false);
+        disatch(getCustomerDetais(id));
+      } else {
+        if (result.status > 400 && result.data === '') {
+          setMessage(`Error deleting ${foundObj.title.toLowerCase()} data`);
+        } else {
+          setMessage(result.data);
+        }
+        setShowConfirmModal(false);
+        setSelectedItemId('');
+      }
+    }
+  };
   return (
     <>
       {message.length > 0 && (
@@ -103,6 +120,12 @@ const CustomerDetails = () => {
           )}
         </>
       )}
+      <ConfirmationModal
+        show={showConfirmModal}
+        onHide={handleCancel}
+        onConfirm={handleConfirm}
+        message={'Are you sure?'}
+      />
     </>
   );
 };
