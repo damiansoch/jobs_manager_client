@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { AddCustomerRequestDto } from '../../classes/allClasses';
 import {
@@ -17,8 +17,12 @@ import {
   updateAxiosFunction,
 } from '../../genericFunctions/axiosFunctions';
 import { isResponceSuccess } from '../../genericFunctions/functions';
-import { fetchData } from '../../genericFunctions/dataManipulationFunctions';
+import {
+  createClassFromObject,
+  fetchData,
+} from '../../genericFunctions/dataManipulationFunctions';
 import { renderFormControl } from './renderingFunctions/renderingFunctions';
+import AppContext from '../../Context/context';
 
 const AddEditComponent = () => {
   const [newObject, setNewObject] = useState({});
@@ -27,6 +31,8 @@ const AddEditComponent = () => {
   const { actionName, id } = useParams();
 
   const navigate = useNavigate();
+
+  const { editedObject } = useContext(AppContext);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -72,11 +78,21 @@ const AddEditComponent = () => {
           break;
 
         case 'editJob':
-          endpoint = `https://localhost:7113/api/Job/${id}`;
+          if (id === '0') {
+            endpoint = `https://localhost:7113/api/Job/${editedObject.id}`;
+          } else {
+            endpoint = `https://localhost:7113/api/Job/${id}`;
+          }
+
           result = await updateAxiosFunction(endpoint, newObject);
           isSuccess = isResponceSuccess(result);
           if (isSuccess) {
-            navigate('/allJobs');
+            if (id === '0') {
+              console.log(editedObject);
+              navigate(`/details/${editedObject.customerId}`);
+            } else {
+              navigate('/allJobs');
+            }
           } else {
             if (result.status === 404 && result.data === '') {
               setErrors('Error updating data');
@@ -121,16 +137,28 @@ const AddEditComponent = () => {
         break;
 
       case 'editJob':
-        endpoint = `https://localhost:7113/api/Job/${id}`;
-        fetchData(actionName, endpoint, setNewObject, setErrors);
+        var newobj;
+        if (id === '0') {
+          newobj = createClassFromObject(actionName, editedObject);
+          setNewObject(newobj);
+        } else {
+          endpoint = `https://localhost:7113/api/Job/${id}`;
+          fetchData(actionName, endpoint, setNewObject, setErrors);
+        }
+        break;
+      case 'editContact':
+        newobj = createClassFromObject(actionName, editedObject);
+        setNewObject(newobj);
+        break;
+      case 'editAddress':
+        newobj = createClassFromObject(actionName, editedObject);
+        setNewObject(newobj);
         break;
 
       default:
         break;
     }
-  }, [actionName, id]);
-
-  //rendering form control based on the data type
+  }, [actionName, id, editedObject]);
 
   return (
     <Card className=' my-3'>
@@ -150,18 +178,7 @@ const AddEditComponent = () => {
             <Form.Group key={key}>
               <Form.Label htmlFor={key}>{key}</Form.Label>
 
-              {
-                renderFormControl(key, newObject[key], newObject, handleChange)
-                /* <Form.Control
-                type='text'
-                id={key}
-                name={key}
-                value={newObject[key] || ''}
-                onChange={(e) => {
-                  handleChange(e);
-                }}
-              /> */
-              }
+              {renderFormControl(key, newObject[key], newObject, handleChange)}
             </Form.Group>
           ))}
           <Button className=' my-2' type='submit' variant='primary'>

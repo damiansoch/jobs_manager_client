@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { getCustomerDetais } from '../../store/customerDetaisSlice';
 import {
   Card,
@@ -18,6 +18,7 @@ import {
 } from '../../genericFunctions/axiosFunctions';
 import { isResponceSuccess } from '../../genericFunctions/functions';
 import ConfirmationModal from '../genericComponent/ConfirmationModal';
+import AppContext from '../../Context/context';
 
 const CustomerDetails = () => {
   const excludedKeys = ['id', 'customerId'];
@@ -28,6 +29,9 @@ const CustomerDetails = () => {
 
   const { id } = useParams();
   const disatch = useDispatch();
+  const navigate = useNavigate();
+
+  const { updateEditedObject } = useContext(AppContext);
 
   const { customer, isLoading, isError, errorMessage } = useSelector(
     (state) => state.details
@@ -38,7 +42,8 @@ const CustomerDetails = () => {
   };
   const editAction = async (itemId) => {
     const foundObj = searchIdInDataTabs(dataTabs, itemId);
-    console.log(foundObj);
+    updateEditedObject(foundObj.obj);
+    navigate(`/addEdit/edit${foundObj.title}/0`);
   };
   const deleteAction = async (itemId) => {
     setMessage('');

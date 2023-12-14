@@ -38,3 +38,13 @@ export class UpdateContactRequestDto {
     this.ExtraDetails = null;
   }
 }
+
+export class UpdateAddressRequestDto {
+  constructor() {
+    this.HouseNumber = null;
+    this.AddressLine1 = null;
+    this.AddressLine2 = null;
+    this.AddressLine3 = null;
+    this.PostCode = null;
+  }
+}
