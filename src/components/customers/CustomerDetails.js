@@ -38,6 +38,7 @@ const CustomerDetails = () => {
   };
   const editAction = async (itemId) => {
     const foundObj = searchIdInDataTabs(dataTabs, itemId);
+    console.log(foundObj);
   };
   const deleteAction = async (itemId) => {
     setMessage('');

@@ -29,3 +29,12 @@ export class UpdateJobRequestDto {
     this.ToBeCompleted = '';
   }
 }
+
+export class UpdateContactRequestDto {
+  constructor() {
+    this.PhoneNumber = '';
+    this.PhoneNumber2 = null;
+    this.Email = '';
+    this.ExtraDetails = null;
+  }
+}
