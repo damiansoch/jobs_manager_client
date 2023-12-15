@@ -1,6 +1,9 @@
 import React from 'react';
-import { Tab, Tabs } from 'react-bootstrap';
+import { Row, Tab, Tabs } from 'react-bootstrap';
 import TableComponent from './TableComponent';
+import { IoAdd } from 'react-icons/io5';
+import pluralize from 'pluralize';
+import { useNavigate } from 'react-router-dom';
 
 const TabsComponent = ({
   dataTabs,
@@ -9,12 +12,27 @@ const TabsComponent = ({
   editActionFunction = undefined,
   deleteActionFunction = undefined,
 }) => {
+  const navigate = useNavigate();
+
+  const handleClick = (data) => {
+    console.log(data);
+    const actionName = `add${pluralize.singular(data)}`;
+    navigate(`/addEdit/${actionName}/0`);
+  };
+
   return (
     <>
       {dataTabs.length > 0 && (
         <Tabs defaultActiveKey='0' id='data-tabs' justify>
           {dataTabs.map((tabItem, index) => (
             <Tab title={tabItem.title} eventKey={index.toString()} key={index}>
+              <Row>
+                <IoAdd
+                  className=' mt-5 col-1 ms-auto text-info icon'
+                  size={30}
+                  onClick={() => handleClick(tabItem.title)}
+                />
+              </Row>
               {Array.isArray(tabItem.data) ? (
                 <TableComponent
                   data={tabItem.data}

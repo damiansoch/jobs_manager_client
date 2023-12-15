@@ -1,4 +1,5 @@
 import {
+  Add_UpdateAddressRequestDto,
   UpdateAddressRequestDto,
   UpdateContactRequestDto,
   UpdateCustomerRequestDto,
@@ -76,7 +77,7 @@ export const createClassFromObject = (actionName, obj) => {
       return updateContactRequestDto;
 
     case 'editAddress':
-      let updateAddressRequestDto = new UpdateAddressRequestDto();
+      let updateAddressRequestDto = new Add_UpdateAddressRequestDto();
       updateAddressRequestDto.HouseNumber = obj.houseNumber;
       updateAddressRequestDto.AddressLine1 = obj.addressLine1;
       updateAddressRequestDto.AddressLine2 = obj.addressLine2;

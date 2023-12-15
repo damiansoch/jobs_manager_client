@@ -1,6 +1,9 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { AddCustomerRequestDto } from '../../classes/allClasses';
+import {
+  AddCustomerRequestDto,
+  Add_UpdateAddressRequestDto,
+} from '../../classes/allClasses';
 import {
   Button,
   Card,
@@ -29,6 +32,7 @@ const AddEditComponent = () => {
   const [errors, setErrors] = useState([]);
 
   const { actionName, id } = useParams();
+  console.log(actionName);
 
   const navigate = useNavigate();
 
@@ -128,6 +132,21 @@ const AddEditComponent = () => {
           }
           break;
 
+        case 'addAddress':
+          endpoint = `https://localhost:7113/api/Address`;
+          result = await addAxiosFunction(endpoint, newObject);
+          isSuccess = isResponceSuccess(result);
+          if (isSuccess) {
+            navigate(`/details/${editedObject.customerId}`);
+          } else {
+            if (result.status === 404 && result.data === '') {
+              setErrors('Error updating data');
+            } else {
+              setErrors(result.data);
+            }
+          }
+          break;
+
         default:
           errors.push(
             `Action name ${actionName} not recognized in handleSubmit`
@@ -181,6 +200,11 @@ const AddEditComponent = () => {
       case 'editAddress':
         newobj = createClassFromObject(actionName, editedObject);
         setNewObject(newobj);
+        break;
+
+      case 'addAddress':
+        var address = new Add_UpdateAddressRequestDto();
+        setNewObject(address);
         break;
 
       default:

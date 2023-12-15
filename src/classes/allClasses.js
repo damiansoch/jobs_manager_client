@@ -39,7 +39,7 @@ export class UpdateContactRequestDto {
   }
 }
 
-export class UpdateAddressRequestDto {
+export class Add_UpdateAddressRequestDto {
   constructor() {
     this.HouseNumber = null;
     this.AddressLine1 = null;

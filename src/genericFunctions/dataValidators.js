@@ -42,6 +42,7 @@ export const validataData = (actionName, data) => {
         ExtraDetails: {},
       };
       break;
+    case 'addAddress':
     case 'editAddress':
       validationRules = {
         HouseNumber: { IsNumber: true },
