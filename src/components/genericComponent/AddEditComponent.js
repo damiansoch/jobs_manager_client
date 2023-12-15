@@ -38,13 +38,15 @@ const AddEditComponent = () => {
     e.preventDefault();
     setErrors([]);
     let errors = validataData(actionName, newObject);
-    console.log(errors);
+
     if (errors.length > 0) {
+      console.log(errors);
       setErrors(errors);
     } else {
       let endpoint = '';
       let result = {};
       let isSuccess = true;
+
       switch (actionName) {
         case 'addCustomer':
           endpoint = 'https://localhost:7113/api/Customer';
@@ -60,7 +62,6 @@ const AddEditComponent = () => {
             }
           }
           break;
-
         case 'editCustomer':
           endpoint = `https://localhost:7113/api/Customer/${id}`;
           result = await updateAxiosFunction(endpoint, newObject);
@@ -74,16 +75,13 @@ const AddEditComponent = () => {
               setErrors(result.data);
             }
           }
-
           break;
-
         case 'editJob':
           if (id === '0') {
             endpoint = `https://localhost:7113/api/Job/${editedObject.id}`;
           } else {
             endpoint = `https://localhost:7113/api/Job/${id}`;
           }
-
           result = await updateAxiosFunction(endpoint, newObject);
           isSuccess = isResponceSuccess(result);
           if (isSuccess) {
@@ -100,7 +98,34 @@ const AddEditComponent = () => {
               setErrors(result.data);
             }
           }
-
+          break;
+        case 'editContact':
+          endpoint = `https://localhost:7113/api/Contact/${editedObject.id}`;
+          result = await updateAxiosFunction(endpoint, newObject);
+          isSuccess = isResponceSuccess(result);
+          if (isSuccess) {
+            navigate(`/details/${editedObject.customerId}`);
+          } else {
+            if (result.status === 404 && result.data === '') {
+              setErrors('Error updating data');
+            } else {
+              setErrors(result.data);
+            }
+          }
+          break;
+        case 'editAddress':
+          endpoint = `https://localhost:7113/api/Address/${editedObject.id}`;
+          result = await updateAxiosFunction(endpoint, newObject);
+          isSuccess = isResponceSuccess(result);
+          if (isSuccess) {
+            navigate(`/details/${editedObject.customerId}`);
+          } else {
+            if (result.status === 404 && result.data === '') {
+              setErrors('Error updating data');
+            } else {
+              setErrors(result.data);
+            }
+          }
           break;
 
         default:
@@ -114,12 +139,15 @@ const AddEditComponent = () => {
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
+
     let newValue = value;
 
     if (type === 'checkbox') {
       newValue = checked;
     } else if (type === 'number') {
       newValue = parseFloat(value);
+    } else if (type === 'date') {
+      newValue = newValue + 'T00:00:00';
     }
     setNewObject((prevFormData) => ({ ...prevFormData, [name]: newValue }));
   };

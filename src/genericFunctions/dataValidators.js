@@ -1,8 +1,6 @@
 import { convertToLabel } from './converters';
 
 export const validataData = (actionName, data) => {
-  console.log(actionName);
-  console.log(data);
   let validationRules = {};
   const errors = [];
 
@@ -33,6 +31,24 @@ export const validataData = (actionName, data) => {
         Price: { Required: true, IsNumber: true },
         Deposit: { Required: true, IsNumber: true },
         ToBeCompleted: { Required: true, IsDate: true },
+      };
+      break;
+
+    case 'editContact':
+      validationRules = {
+        PhoneNumber: { Required: true, MaxLength: 50 },
+        PhoneNumber2: { MaxLength: 50 },
+        Email: { Required: true, MaxLength: 200, EmailAddress: true },
+        ExtraDetails: {},
+      };
+      break;
+    case 'editAddress':
+      validationRules = {
+        HouseNumber: { IsNumber: true },
+        AddressLine1: { MaxLength: 255 },
+        AddressLine2: { MaxLength: 255 },
+        AddressLine3: { MaxLength: 255 },
+        PostCode: { MaxLength: 50 },
       };
       break;
 
@@ -95,7 +111,7 @@ const isValidNumber = (value) => {
 
 //helper function to check if valid date
 const isValidDate = (dateString) => {
-  const dateRegex = /^\d{4}-\d{2}-\d{2}$/; //YYYY-MM-dd
+  const dateRegex = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/; //YYYY-MM-ddT00:00:00
   if (!dateRegex.test(dateString)) return false;
 
   const date = new Date(dateString);

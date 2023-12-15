@@ -19,7 +19,7 @@ export const renderFormControl = (key, value, newObject, handleChange) => {
         type='number'
         id={key}
         name={key}
-        value={value}
+        value={value || 0}
         onChange={(e) => {
           handleChange(e);
         }}
@@ -29,7 +29,6 @@ export const renderFormControl = (key, value, newObject, handleChange) => {
     typeof value === 'string' &&
     value.match(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/)
   ) {
-    console.log(value);
     const formatedDate = value.split('T')[0];
     return (
       <Form.Control
