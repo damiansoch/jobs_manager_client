@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import {
   AddCustomerRequestDto,
   Add_UpdateAddressRequestDto,
+  Add_UpdateJobRequestDto,
 } from '../../classes/allClasses';
 import {
   Button,
@@ -32,7 +33,6 @@ const AddEditComponent = () => {
   const [errors, setErrors] = useState([]);
 
   const { actionName, id } = useParams();
-  console.log(actionName);
 
   const navigate = useNavigate();
 
@@ -133,11 +133,11 @@ const AddEditComponent = () => {
           break;
 
         case 'addAddress':
-          endpoint = `https://localhost:7113/api/Address`;
+          endpoint = `https://localhost:7113/api/Address/${id}`;
           result = await addAxiosFunction(endpoint, newObject);
           isSuccess = isResponceSuccess(result);
           if (isSuccess) {
-            navigate(`/details/${editedObject.customerId}`);
+            navigate(`/details/${id}`);
           } else {
             if (result.status === 404 && result.data === '') {
               setErrors('Error updating data');
@@ -147,6 +147,21 @@ const AddEditComponent = () => {
           }
           break;
 
+        case 'addJob':
+          endpoint = `https://localhost:7113/api/Job/${id}`;
+
+          result = await addAxiosFunction(endpoint, newObject);
+          isSuccess = isResponceSuccess(result);
+          if (isSuccess) {
+            navigate(`/details/${id}`);
+          } else {
+            if (result.status === 404 && result.data === '') {
+              setErrors('Error updating data');
+            } else {
+              setErrors(result.data);
+            }
+          }
+          break;
         default:
           errors.push(
             `Action name ${actionName} not recognized in handleSubmit`
@@ -203,8 +218,16 @@ const AddEditComponent = () => {
         break;
 
       case 'addAddress':
-        var address = new Add_UpdateAddressRequestDto();
+        const address = new Add_UpdateAddressRequestDto();
         setNewObject(address);
+        break;
+
+      case 'addJob':
+        let job = new Add_UpdateJobRequestDto();
+        let currentDate = new Date();
+        let formatedDate = currentDate.toISOString().slice(0, 19);
+        job.ToBeCompleted = formatedDate;
+        setNewObject(job);
         break;
 
       default:

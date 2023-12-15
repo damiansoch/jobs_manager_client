@@ -1,6 +1,6 @@
 import {
   Add_UpdateAddressRequestDto,
-  UpdateAddressRequestDto,
+  Add_UpdateJobRequestDto,
   UpdateContactRequestDto,
   UpdateCustomerRequestDto,
   UpdateJobRequestDto,
@@ -51,7 +51,7 @@ export const createClassFromObject = (actionName, obj) => {
       return updateCustomerRequestDto;
 
     case 'editJob':
-      let updateJobRequestDto = new UpdateJobRequestDto();
+      let updateJobRequestDto = new Add_UpdateJobRequestDto();
       if (obj.data === undefined) {
         updateJobRequestDto.Name = obj.name;
         updateJobRequestDto.Description = obj.description;

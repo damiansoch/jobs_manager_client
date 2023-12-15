@@ -16,6 +16,7 @@ export const validataData = (actionName, data) => {
         ExtraDetails: {},
       };
       break;
+
     case 'editCustomer':
       validationRules = {
         FirstName: { Required: true, MaxLength: 255 },
@@ -24,6 +25,7 @@ export const validataData = (actionName, data) => {
       };
       break;
 
+    case 'addJob':
     case 'editJob':
       validationRules = {
         Name: { Required: true, MaxLength: 255 },
@@ -42,6 +44,7 @@ export const validataData = (actionName, data) => {
         ExtraDetails: {},
       };
       break;
+
     case 'addAddress':
     case 'editAddress':
       validationRules = {

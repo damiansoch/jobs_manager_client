@@ -20,7 +20,7 @@ export class UpdateCustomerRequestDto {
   }
 }
 
-export class UpdateJobRequestDto {
+export class Add_UpdateJobRequestDto {
   constructor() {
     this.Name = '';
     this.Description = '';

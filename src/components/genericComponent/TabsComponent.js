@@ -3,7 +3,7 @@ import { Row, Tab, Tabs } from 'react-bootstrap';
 import TableComponent from './TableComponent';
 import { IoAdd } from 'react-icons/io5';
 import pluralize from 'pluralize';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 const TabsComponent = ({
   dataTabs,
@@ -13,11 +13,11 @@ const TabsComponent = ({
   deleteActionFunction = undefined,
 }) => {
   const navigate = useNavigate();
+  const { id: customerId } = useParams();
 
   const handleClick = (data) => {
-    console.log(data);
     const actionName = `add${pluralize.singular(data)}`;
-    navigate(`/addEdit/${actionName}/0`);
+    navigate(`/addEdit/${actionName}/${customerId}`);
   };
 
   return (
