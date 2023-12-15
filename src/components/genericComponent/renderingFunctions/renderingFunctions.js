@@ -19,7 +19,7 @@ export const renderFormControl = (key, value, newObject, handleChange) => {
         type='number'
         id={key}
         name={key}
-        value={value || 0}
+        value={value || ''}
         onChange={(e) => {
           handleChange(e);
         }}

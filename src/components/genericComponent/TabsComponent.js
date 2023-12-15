@@ -27,11 +27,13 @@ const TabsComponent = ({
           {dataTabs.map((tabItem, index) => (
             <Tab title={tabItem.title} eventKey={index.toString()} key={index}>
               <Row>
-                <IoAdd
-                  className=' mt-5 col-1 ms-auto text-info icon'
-                  size={30}
-                  onClick={() => handleClick(tabItem.title)}
-                />
+                {tabItem.title !== 'Contact' && (
+                  <IoAdd
+                    className=' mt-5 col-1 ms-auto text-info icon'
+                    size={30}
+                    onClick={() => handleClick(tabItem.title)}
+                  />
+                )}
               </Row>
               {Array.isArray(tabItem.data) ? (
                 <TableComponent

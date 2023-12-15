@@ -38,6 +38,70 @@ const AddEditComponent = () => {
 
   const { editedObject } = useContext(AppContext);
 
+  useEffect(() => {
+    let endpoint = '';
+    switch (actionName) {
+      case 'addCustomer':
+        const customer = new AddCustomerRequestDto();
+        setNewObject(customer);
+        break;
+      case 'editCustomer':
+        endpoint = `https://localhost:7113/api/Customer/${id}`;
+        fetchData(actionName, endpoint, setNewObject, setErrors);
+        break;
+
+      case 'editJob':
+        var newobj;
+        if (id === '0') {
+          newobj = createClassFromObject(actionName, editedObject);
+          setNewObject(newobj);
+        } else {
+          endpoint = `https://localhost:7113/api/Job/${id}`;
+          fetchData(actionName, endpoint, setNewObject, setErrors);
+        }
+        break;
+      case 'editContact':
+        newobj = createClassFromObject(actionName, editedObject);
+        setNewObject(newobj);
+        break;
+      case 'editAddress':
+        newobj = createClassFromObject(actionName, editedObject);
+        setNewObject(newobj);
+        break;
+
+      case 'addAddress':
+        const address = new Add_UpdateAddressRequestDto();
+        setNewObject(address);
+        break;
+
+      case 'addJob':
+        let job = new Add_UpdateJobRequestDto();
+        let currentDate = new Date();
+        let formatedDate = currentDate.toISOString().slice(0, 19);
+        job.ToBeCompleted = formatedDate;
+        setNewObject(job);
+        break;
+
+      default:
+        break;
+    }
+  }, [actionName, id, editedObject]);
+
+  const handleChange = (e) => {
+    const { name, value, type, checked } = e.target;
+
+    let newValue = value;
+
+    if (type === 'checkbox') {
+      newValue = checked;
+    } else if (type === 'number') {
+      newValue = parseFloat(value);
+    } else if (type === 'date') {
+      newValue = newValue + 'T00:00:00';
+    }
+    setNewObject((prevFormData) => ({ ...prevFormData, [name]: newValue }));
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setErrors([]);
@@ -170,70 +234,6 @@ const AddEditComponent = () => {
       }
     }
   };
-
-  const handleChange = (e) => {
-    const { name, value, type, checked } = e.target;
-
-    let newValue = value;
-
-    if (type === 'checkbox') {
-      newValue = checked;
-    } else if (type === 'number') {
-      newValue = parseFloat(value);
-    } else if (type === 'date') {
-      newValue = newValue + 'T00:00:00';
-    }
-    setNewObject((prevFormData) => ({ ...prevFormData, [name]: newValue }));
-  };
-
-  useEffect(() => {
-    let endpoint = '';
-    switch (actionName) {
-      case 'addCustomer':
-        const customer = new AddCustomerRequestDto();
-        setNewObject(customer);
-        break;
-      case 'editCustomer':
-        endpoint = `https://localhost:7113/api/Customer/${id}`;
-        fetchData(actionName, endpoint, setNewObject, setErrors);
-        break;
-
-      case 'editJob':
-        var newobj;
-        if (id === '0') {
-          newobj = createClassFromObject(actionName, editedObject);
-          setNewObject(newobj);
-        } else {
-          endpoint = `https://localhost:7113/api/Job/${id}`;
-          fetchData(actionName, endpoint, setNewObject, setErrors);
-        }
-        break;
-      case 'editContact':
-        newobj = createClassFromObject(actionName, editedObject);
-        setNewObject(newobj);
-        break;
-      case 'editAddress':
-        newobj = createClassFromObject(actionName, editedObject);
-        setNewObject(newobj);
-        break;
-
-      case 'addAddress':
-        const address = new Add_UpdateAddressRequestDto();
-        setNewObject(address);
-        break;
-
-      case 'addJob':
-        let job = new Add_UpdateJobRequestDto();
-        let currentDate = new Date();
-        let formatedDate = currentDate.toISOString().slice(0, 19);
-        job.ToBeCompleted = formatedDate;
-        setNewObject(job);
-        break;
-
-      default:
-        break;
-    }
-  }, [actionName, id, editedObject]);
 
   return (
     <Card className=' my-3'>
