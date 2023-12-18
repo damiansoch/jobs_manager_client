@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getCustomers } from '../../store/customersSlice';
 import SpinnerComponent from '../genericComponent/SpinnerComponent';
@@ -10,6 +10,7 @@ import ConfirmationModal from '../genericComponent/ConfirmationModal';
 import { Row } from 'react-bootstrap';
 import { IoIosPersonAdd } from 'react-icons/io';
 import { useNavigate } from 'react-router-dom';
+import AppContext from '../../Context/context';
 
 const AllCustomers = () => {
   const [showConfirmModal, setShowConfirmModal] = useState(false);
@@ -24,6 +25,8 @@ const AllCustomers = () => {
   const { customers, isLoading, isError, errorMessage } = useSelector(
     (state) => state.customers
   );
+
+  const { updateInitialSearchArray } = useContext(AppContext);
 
   const detailAction = async (itemId) => {
     navigate(`/details/${itemId}`);
@@ -73,6 +76,12 @@ const AllCustomers = () => {
   useEffect(() => {
     dispatch(getCustomers());
   }, [dispatch]);
+
+  useEffect(() => {
+    if (customers.length > 0) {
+      updateInitialSearchArray(customers);
+    }
+  }, [updateInitialSearchArray, customers]);
   return (
     <>
       {message.length > 0 && (

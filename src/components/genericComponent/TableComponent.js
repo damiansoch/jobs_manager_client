@@ -4,6 +4,8 @@ import {
   convertDateForTable,
 } from '../../genericFunctions/converters';
 import TableActionsComponent from './TableActionsComponent';
+import { useContext, useEffect } from 'react';
+import AppContext from '../../Context/context';
 
 const TableComponent = ({
   data,
@@ -14,6 +16,12 @@ const TableComponent = ({
   deleteActionFunction = undefined,
   areTabs = false,
 }) => {
+  const { updateSearchBy } = useContext(AppContext);
+
+  const clickHandler = (key) => {
+    updateSearchBy(key);
+  };
+
   //Function to generate the table headers
   const renderTableHeader = () => {
     if (data.length === 0) return null;
@@ -22,7 +30,12 @@ const TableComponent = ({
         {Object.keys(data[0])
           .filter((key) => !excludedKeys.includes(key))
           .map((key) => (
-            <th className=' text-center' key={key}>
+            <th
+              style={{ cursor: 'pointer' }}
+              className=' text-center'
+              key={key}
+              onClick={() => clickHandler(key)}
+            >
               {convertToLabel(key)}
             </th>
           ))}

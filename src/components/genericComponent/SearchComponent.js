@@ -1,9 +1,23 @@
 import React, { useContext } from 'react';
-import { Button, Card, CardBody, Col, Form, Row } from 'react-bootstrap';
+import {
+  Button,
+  Card,
+  CardBody,
+  CardFooter,
+  Col,
+  Form,
+  Row,
+} from 'react-bootstrap';
 import AppContext from '../../Context/context';
 
 const SearchComponent = () => {
-  const { searchVisible } = useContext(AppContext);
+  const { searchVisible, updateSearchText, searchText, searchBy } =
+    useContext(AppContext);
+
+  const changeHandler = (text) => {
+    updateSearchText(text);
+  };
+
   return (
     <>
       {searchVisible && (
@@ -12,9 +26,20 @@ const SearchComponent = () => {
             <Form>
               <Row>
                 <Col>
-                  <Form.Control type='text' placeholder='Search' />
+                  <Form.Control
+                    type='text'
+                    placeholder='Search'
+                    onChange={(e) => {
+                      changeHandler(e.target.value);
+                    }}
+                    value={searchText}
+                  />
                   <div className=' col-1 mx-auto'>
-                    <Button type='submit' className=' my-4'>
+                    <Button
+                      disabled={searchBy === ''}
+                      type='submit'
+                      className=' my-4'
+                    >
                       Search
                     </Button>
                   </div>
@@ -22,6 +47,13 @@ const SearchComponent = () => {
               </Row>
             </Form>
           </CardBody>
+          <CardFooter className=' text-center'>
+            {searchBy === '' ? (
+              <small>Click the label to select</small>
+            ) : (
+              <small>Searching by: {searchBy}</small>
+            )}
+          </CardFooter>
         </Card>
       )}
     </>

@@ -7,7 +7,7 @@ import { useContext } from 'react';
 import AppContext from '../../Context/context';
 
 const Navigation = () => {
-  const { upadateSearchVisibility } = useContext(AppContext);
+  const { upadateSearchVisibility, updateSearchBy } = useContext(AppContext);
 
   const clickHandler = () => {
     upadateSearchVisibility();
@@ -22,10 +22,22 @@ const Navigation = () => {
         <Navbar.Toggle aria-controls='basic-navbar-nav' />
         <Navbar.Collapse id='basic-navbar-nav'>
           <Nav className='ms-auto'>
-            <Link className=' mx-3' to='/'>
+            <Link
+              onClick={() => {
+                updateSearchBy('');
+              }}
+              className=' mx-3'
+              to='/'
+            >
               Customers
             </Link>
-            <Link className=' mx-3' to='/allJobs'>
+            <Link
+              onClick={() => {
+                updateSearchBy('');
+              }}
+              className=' mx-3'
+              to='/allJobs'
+            >
               Jobs
             </Link>
             <TbListSearch
