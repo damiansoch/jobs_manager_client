@@ -4,7 +4,7 @@ import {
   convertDateForTable,
 } from '../../genericFunctions/converters';
 import TableActionsComponent from './TableActionsComponent';
-import { useContext, useEffect } from 'react';
+import { useContext } from 'react';
 import AppContext from '../../Context/context';
 
 const TableComponent = ({
@@ -16,7 +16,7 @@ const TableComponent = ({
   deleteActionFunction = undefined,
   areTabs = false,
 }) => {
-  const { updateSearchBy } = useContext(AppContext);
+  const { updateSearchBy, resultArray } = useContext(AppContext);
 
   const clickHandler = (key) => {
     updateSearchBy(key);
@@ -24,10 +24,10 @@ const TableComponent = ({
 
   //Function to generate the table headers
   const renderTableHeader = () => {
-    if (data.length === 0) return null;
+    if (resultArray.length === 0) return null;
     return (
       <tr>
-        {Object.keys(data[0])
+        {Object.keys(resultArray[0])
           .filter((key) => !excludedKeys.includes(key))
           .map((key) => (
             <th
@@ -47,7 +47,7 @@ const TableComponent = ({
   //Function to generate the table rows
 
   const renderTableRows = () => {
-    return data.map((item, index) => (
+    return resultArray.map((item, index) => (
       <tr key={index}>
         {Object.entries(item)
           .filter(([key]) => !excludedKeys.includes(key))

@@ -1,4 +1,4 @@
-import { createContext, useState } from 'react';
+import { createContext, useEffect, useState } from 'react';
 
 const AppContext = createContext();
 
@@ -7,6 +7,7 @@ export const AppProvider = ({ children }) => {
   const [searchVisible, setSearchVisible] = useState(false);
   const [searchText, setSearchText] = useState('');
   const [initialSearchArray, setInitialSearchArray] = useState([]);
+  const [resultArray, setResultArray] = useState([]);
   const [searchBy, setSearchBy] = useState('');
 
   const updateEditedObject = (newValue) => {
@@ -29,6 +30,26 @@ export const AppProvider = ({ children }) => {
     setSearchBy(newValue);
   };
 
+  useEffect(() => {
+    if (initialSearchArray.length > 0) {
+      setResultArray(initialSearchArray);
+    }
+  }, [initialSearchArray]);
+
+  useEffect(() => {
+    if (initialSearchArray.length > 0 && searchBy !== '') {
+      let filteredResult = initialSearchArray.filter((item) =>
+        item[searchBy] != null
+          ? item[searchBy]
+              .toString()
+              .toLowerCase()
+              .includes(searchText.toLocaleLowerCase())
+          : item
+      );
+      setResultArray(filteredResult);
+    }
+  }, [initialSearchArray, searchBy, searchText]);
+
   return (
     <AppContext.Provider
       value={{
@@ -41,6 +62,7 @@ export const AppProvider = ({ children }) => {
         updateInitialSearchArray,
         updateSearchBy,
         searchBy,
+        resultArray,
       }}
     >
       {children}
