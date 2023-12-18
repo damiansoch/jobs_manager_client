@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { getAxiosFunction } from '../../genericFunctions/axiosFunctions';
 import { isResponceSuccess } from '../../genericFunctions/functions';
 import ResultComponent from '../genericComponent/ResultComponent';
@@ -6,6 +6,7 @@ import TableComponent from '../genericComponent/TableComponent';
 import { alterData } from '../../genericFunctions/dataManipulationFunctions';
 import ConfirmationModal from '../genericComponent/ConfirmationModal';
 import { useNavigate } from 'react-router-dom';
+import AppContext from '../../Context/context';
 
 const AllJobs = () => {
   const [allJobs, setAllJobs] = useState([]);
@@ -16,6 +17,8 @@ const AllJobs = () => {
   const [isErrorResult, setIsErrorResult] = useState(false);
 
   const excludedKeys = ['id', 'customerId'];
+
+  const { updateInitialSearchArray } = useContext(AppContext);
 
   const navigate = useNavigate();
 
@@ -89,6 +92,12 @@ const AllJobs = () => {
     var endpoint = 'https://localhost:7113/api/Job';
     fetchData(endpoint);
   }, []);
+
+  useEffect(() => {
+    if (allJobs.length > 0) {
+      updateInitialSearchArray(allJobs);
+    }
+  }, [allJobs, updateInitialSearchArray]);
 
   return (
     <>

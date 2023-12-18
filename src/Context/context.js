@@ -1,4 +1,5 @@
 import { createContext, useEffect, useState } from 'react';
+import { sortArray } from './helpers/functions';
 
 const AppContext = createContext();
 
@@ -9,8 +10,7 @@ export const AppProvider = ({ children }) => {
   const [initialSearchArray, setInitialSearchArray] = useState([]);
   const [resultArray, setResultArray] = useState([]);
   const [searchBy, setSearchBy] = useState('');
-
-  console.log(initialSearchArray);
+  const [order, setOrder] = useState('asc');
 
   const updateEditedObject = (newValue) => {
     setEditedObject(newValue);
@@ -29,9 +29,18 @@ export const AppProvider = ({ children }) => {
   };
 
   const updateSearchBy = (newValue) => {
+    setSearchText('');
     setSearchBy(newValue);
   };
 
+  const updateOrder = (key) => {
+    let sortingOrder = order === 'asc' ? 'desc' : 'asc';
+    const sortedArray = sortArray(resultArray, key, order);
+    //setResultArray(sortedArray);
+    setOrder(sortingOrder);
+  };
+
+  //---------------------------------------------
   useEffect(() => {
     if (initialSearchArray.length > 0) {
       setResultArray(initialSearchArray);
@@ -65,6 +74,7 @@ export const AppProvider = ({ children }) => {
         updateSearchBy,
         searchBy,
         resultArray,
+        updateOrder,
       }}
     >
       {children}

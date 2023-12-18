@@ -6,6 +6,7 @@ import {
 import TableActionsComponent from './TableActionsComponent';
 import { useContext, useEffect } from 'react';
 import AppContext from '../../Context/context';
+import { BiSortAlt2 } from 'react-icons/bi';
 
 const TableComponent = ({
   data,
@@ -16,40 +17,60 @@ const TableComponent = ({
   deleteActionFunction = undefined,
   areTabs = false,
 }) => {
-  const { updateSearchBy, resultArray, updateInitialSearchArray } =
-    useContext(AppContext);
+  const { updateSearchBy, resultArray, updateOrder } = useContext(AppContext);
 
   const clickHandler = (key) => {
     updateSearchBy(key);
+  };
+  const sortHandler = (key) => {
+    updateOrder(key);
   };
 
   //Function to generate the table headers
   const renderTableHeader = () => {
     if (resultArray.length === 0) return null;
     return (
-      <tr>
-        {Object.keys(resultArray[0])
-          .filter((key) => !excludedKeys.includes(key))
-          .map((key) => (
-            <th
-              style={{ cursor: 'pointer' }}
-              className=' text-center'
-              key={key}
-              onClick={() => clickHandler(key)}
-            >
-              {convertToLabel(key)}
-            </th>
-          ))}
-        {showActions && <th className=' text-center'>Actions</th>}
-      </tr>
+      <>
+        <tr>
+          {Object.keys(resultArray[0])
+            .filter((key) => !excludedKeys.includes(key))
+            .map((key) => (
+              <th
+                style={{ cursor: 'pointer' }}
+                className=' text-center'
+                key={key}
+                onClick={() => clickHandler(key)}
+              >
+                {convertToLabel(key)}
+              </th>
+            ))}
+          {showActions && <th className=' text-center'>Actions</th>}
+        </tr>
+        <tr>
+          {Object.keys(resultArray[0])
+            .filter((key) => !excludedKeys.includes(key))
+            .map((key) => (
+              <td
+                style={{ cursor: 'pointer' }}
+                className=' text-center'
+                key={key}
+                onClick={() => sortHandler(key)}
+              >
+                <BiSortAlt2 className=' text-info' />
+              </td>
+            ))}
+          {showActions && <th className=' text-center'> - </th>}
+        </tr>
+      </>
     );
   };
 
-  useEffect(() => {
-    if (data.length > 0) {
-      updateInitialSearchArray(data);
-    }
-  }, [data, updateInitialSearchArray]);
+  // useEffect(() => {
+  //   console.log(data);
+  //   if (data.length > 0) {
+  //     updateInitialSearchArray(data);
+  //   }
+  // }, [data, updateInitialSearchArray]);
 
   //Function to generate the table rows
 
