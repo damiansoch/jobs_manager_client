@@ -4,7 +4,7 @@ import {
   convertDateForTable,
 } from '../../genericFunctions/converters';
 import TableActionsComponent from './TableActionsComponent';
-import { useContext } from 'react';
+import { useContext, useEffect } from 'react';
 import AppContext from '../../Context/context';
 
 const TableComponent = ({
@@ -16,7 +16,8 @@ const TableComponent = ({
   deleteActionFunction = undefined,
   areTabs = false,
 }) => {
-  const { updateSearchBy, resultArray } = useContext(AppContext);
+  const { updateSearchBy, resultArray, updateInitialSearchArray } =
+    useContext(AppContext);
 
   const clickHandler = (key) => {
     updateSearchBy(key);
@@ -43,6 +44,12 @@ const TableComponent = ({
       </tr>
     );
   };
+
+  useEffect(() => {
+    if (data.length > 0) {
+      updateInitialSearchArray(data);
+    }
+  }, [data, updateInitialSearchArray]);
 
   //Function to generate the table rows
 
