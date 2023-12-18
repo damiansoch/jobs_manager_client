@@ -6,12 +6,14 @@ import AllJobs from './components/jobs/AllJobs';
 import AddEditComponent from './components/genericComponent/AddEditComponent';
 import CustomerDetails from './components/customers/CustomerDetails';
 import { AppProvider } from './Context/context';
+import SearchComponent from './components/genericComponent/SearchComponent';
 
 function App() {
   return (
     <div className='App'>
       <AppProvider>
         <Navigation />
+        <SearchComponent />
         <Routes>
           <Route path='/' element={<AllCustomers />} />
           <Route path='/allJobs' element={<AllJobs />} />
