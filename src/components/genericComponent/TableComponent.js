@@ -1,4 +1,4 @@
-import { Table } from 'react-bootstrap';
+import { Form, Table } from 'react-bootstrap';
 import {
   convertToLabel,
   convertDateForTable,
@@ -14,6 +14,7 @@ const TableComponent = ({
   detailsActionFunction = undefined,
   editActionFunction = undefined,
   deleteActionFunction = undefined,
+  markCompletedAction = undefined,
   areTabs = false,
 }) => {
   const { updateSearchBy, resultArray, updateOrder } = useContext(AppContext);
@@ -23,6 +24,10 @@ const TableComponent = ({
   };
   const sortHandler = (key) => {
     updateOrder(key);
+  };
+
+  const checkboxChanngeHandler = (completed, id) => {
+    markCompletedAction(!completed, id);
   };
 
   //Function to generate the table headers
@@ -64,23 +69,26 @@ const TableComponent = ({
     );
   };
 
-  // useEffect(() => {
-  //   console.log(data);
-  //   if (data.length > 0) {
-  //     updateInitialSearchArray(data);
-  //   }
-  // }, [data, updateInitialSearchArray]);
-
-  //Function to generate the table rows
-
   const renderTableRows = () => {
     return resultArray.map((item, index) => (
       <tr key={index}>
         {Object.entries(item)
           .filter(([key]) => !excludedKeys.includes(key))
-          .map(([key, val], idx) => (
-            <td key={idx}>{convertDateForTable(val)}</td>
-          ))}
+          .map(([key, val], idx) => {
+            if (typeof val === 'boolean') {
+              return (
+                <td key={idx} className=' text-center'>
+                  <Form.Check
+                    type='checkbox'
+                    checked={val}
+                    onChange={() => checkboxChanngeHandler(val, item.id)}
+                  />
+                </td>
+              );
+            } else {
+              return <td key={idx}>{convertDateForTable(val)}</td>;
+            }
+          })}
         {showActions && (
           <td>
             <TableActionsComponent

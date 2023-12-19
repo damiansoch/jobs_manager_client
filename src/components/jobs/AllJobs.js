@@ -1,5 +1,8 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { getAxiosFunction } from '../../genericFunctions/axiosFunctions';
+import {
+  getAxiosFunction,
+  updateAxiosFunction,
+} from '../../genericFunctions/axiosFunctions';
 import { isResponceSuccess } from '../../genericFunctions/functions';
 import ResultComponent from '../genericComponent/ResultComponent';
 import TableComponent from '../genericComponent/TableComponent';
@@ -24,6 +27,22 @@ const AllJobs = () => {
 
   const editAction = (jobId) => {
     navigate(`/addEdit/editJob/${jobId}`);
+  };
+
+  const markCompletedAction = async (completed, id) => {
+    var endpoint = `https://localhost:7113/api/Job/${id}/${completed}`;
+    var result = await updateAxiosFunction(endpoint, {});
+    const isSuccess = isResponceSuccess(result);
+    if (isSuccess) {
+      var endpoint1 = 'https://localhost:7113/api/Job';
+      fetchData(endpoint1);
+    } else {
+      if (result.status === 404 && result.data === '') {
+        setMessage('Error fetching job data');
+      } else {
+        setMessage(result.data);
+      }
+    }
   };
 
   const detailAction = async (jobId) => {
@@ -117,6 +136,7 @@ const AllJobs = () => {
               detailsActionFunction={detailAction}
               editActionFunction={editAction}
               deleteActionFunction={deleteAction}
+              markCompletedAction={markCompletedAction}
             />
           )
         )}

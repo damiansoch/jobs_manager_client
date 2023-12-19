@@ -12,7 +12,10 @@ import {
 import ResultComponent from '../genericComponent/ResultComponent';
 import TabsComponent from '../genericComponent/TabsComponent';
 import { searchIdInDataTabs } from './functions/helperFunctions';
-import { deleteAxiosFunction } from '../../genericFunctions/axiosFunctions';
+import {
+  deleteAxiosFunction,
+  updateAxiosFunction,
+} from '../../genericFunctions/axiosFunctions';
 import { isResponceSuccess } from '../../genericFunctions/functions';
 import ConfirmationModal from '../genericComponent/ConfirmationModal';
 import AppContext from '../../Context/context';
@@ -46,6 +49,21 @@ const CustomerDetails = () => {
     setMessage('');
     setSelectedItemId(itemId);
     setShowConfirmModal(true);
+  };
+  const markCompletedAction = async (completed, jobId) => {
+    var endpoint = `https://localhost:7113/api/Job/${jobId}/${completed}`;
+    var result = await updateAxiosFunction(endpoint, {});
+
+    const isSuccess = isResponceSuccess(result);
+    if (isSuccess) {
+      disatch(getCustomerDetais(id));
+    } else {
+      if (result.status === 404 && result.data === '') {
+        setMessage('Error fetching job data');
+      } else {
+        setMessage(result.data);
+      }
+    }
   };
   useEffect(() => {
     if (id !== undefined) {
@@ -119,6 +137,7 @@ const CustomerDetails = () => {
                   detailsActionFunction={detailAction}
                   editActionFunction={editAction}
                   deleteActionFunction={deleteAction}
+                  markCompletedAction={markCompletedAction}
                   excludedKeys={excludedKeys}
                 />
               </CardBody>

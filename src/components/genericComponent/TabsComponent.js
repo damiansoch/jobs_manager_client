@@ -12,6 +12,7 @@ const TabsComponent = ({
   detailsActionFunction = undefined,
   editActionFunction = undefined,
   deleteActionFunction = undefined,
+  markCompletedAction = undefined,
 }) => {
   const navigate = useNavigate();
   const { id: customerId } = useParams();
@@ -75,6 +76,7 @@ const TabsComponent = ({
                   detailsActionFunction={detailsActionFunction}
                   editActionFunction={editActionFunction}
                   deleteActionFunction={deleteActionFunction}
+                  markCompletedAction={markCompletedAction}
                   areTabs={true}
                 />
               ) : (
@@ -83,6 +85,7 @@ const TabsComponent = ({
                   detailsActionFunction={detailsActionFunction}
                   editActionFunction={editActionFunction}
                   deleteActionFunction={deleteActionFunction}
+                  markCompletedAction={markCompletedAction}
                   areTabs={true}
                 />
               )}
