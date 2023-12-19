@@ -9,6 +9,7 @@ import {
   Row,
 } from 'react-bootstrap';
 import AppContext from '../../Context/context';
+import { convertToLabel } from '../../genericFunctions/converters';
 
 const SearchComponent = () => {
   const { searchVisible, updateSearchText, searchText, searchBy } =
@@ -51,7 +52,12 @@ const SearchComponent = () => {
             {searchBy === '' ? (
               <small>Click the label to select</small>
             ) : (
-              <small>Searching by: {searchBy}</small>
+              <small>
+                Searching by:{' '}
+                <span className=' text-warning'>
+                  {convertToLabel(searchBy)}
+                </span>
+              </small>
             )}
           </CardFooter>
         </Card>
