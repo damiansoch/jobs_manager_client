@@ -12,6 +12,8 @@ export const AppProvider = ({ children }) => {
   const [searchBy, setSearchBy] = useState('');
   const [order, setOrder] = useState('asc');
 
+  console.log(initialSearchArray);
+
   const updateEditedObject = (newValue) => {
     setEditedObject(newValue);
   };

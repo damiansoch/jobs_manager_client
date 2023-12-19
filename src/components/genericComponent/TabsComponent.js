@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useContext, useEffect } from 'react';
 import { Row, Tab, Tabs } from 'react-bootstrap';
 import TableComponent from './TableComponent';
 import { IoAdd } from 'react-icons/io5';
 import pluralize from 'pluralize';
 import { useNavigate, useParams } from 'react-router-dom';
+import AppContext from '../../Context/context';
 
 const TabsComponent = ({
   dataTabs,
@@ -14,11 +15,21 @@ const TabsComponent = ({
 }) => {
   const navigate = useNavigate();
   const { id: customerId } = useParams();
+  const { updateInitialSearchArray } = useContext(AppContext);
 
   const handleClick = (data) => {
     const actionName = `add${pluralize.singular(data)}`;
     navigate(`/addEdit/${actionName}/${customerId}`);
   };
+
+  useEffect(() => {
+    if (dataTabs.length > 0) {
+      const contactData = dataTabs.filter((entry) => entry.title === 'Contact');
+      const contact = contactData[0].data;
+      updateInitialSearchArray([contact]);
+    }
+    // eslint-disable-next-line
+  }, [dataTabs]);
 
   return (
     <>
