@@ -7,6 +7,7 @@ import TableActionsComponent from './TableActionsComponent';
 import { useContext } from 'react';
 import AppContext from '../../Context/context';
 import { BiSortAlt2 } from 'react-icons/bi';
+import ResultComponent from './ResultComponent';
 
 const TableComponent = ({
   excludedKeys = [],
@@ -105,10 +106,16 @@ const TableComponent = ({
     ));
   };
   return (
-    <Table className=' my-5' variant='success' striped bordered hover>
-      <thead>{renderTableHeader()}</thead>
-      <tbody>{renderTableRows()}</tbody>
-    </Table>
+    <>
+      {resultArray.length === 0 ? (
+        <ResultComponent variant='info' data='No data to display' />
+      ) : (
+        <Table className=' my-5' variant='success' striped bordered hover>
+          <thead>{renderTableHeader()}</thead>
+          <tbody>{renderTableRows()}</tbody>
+        </Table>
+      )}
+    </>
   );
 };
 

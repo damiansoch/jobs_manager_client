@@ -42,7 +42,7 @@ export const AppProvider = ({ children }) => {
 
   //---------------------------------------------
   useEffect(() => {
-    if (initialSearchArray.length > 0) {
+    if (initialSearchArray.length >= 0) {
       setResultArray(initialSearchArray);
     }
   }, [initialSearchArray]);
