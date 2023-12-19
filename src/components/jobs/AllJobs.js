@@ -113,7 +113,6 @@ const AllJobs = () => {
         ) : (
           allJobs.length > 0 && (
             <TableComponent
-              data={allJobs}
               excludedKeys={excludedKeys}
               detailsActionFunction={detailAction}
               editActionFunction={editAction}

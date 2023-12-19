@@ -12,8 +12,6 @@ export const AppProvider = ({ children }) => {
   const [searchBy, setSearchBy] = useState('');
   const [order, setOrder] = useState('asc');
 
-  //console.log(initialSearchArray);
-
   const updateEditedObject = (newValue) => {
     setEditedObject(newValue);
   };
@@ -38,7 +36,7 @@ export const AppProvider = ({ children }) => {
   const updateOrder = (key) => {
     let sortingOrder = order === 'asc' ? 'desc' : 'asc';
     const sortedArray = sortArray(resultArray, key, order);
-    //setResultArray(sortedArray);
+    setResultArray(sortedArray);
     setOrder(sortingOrder);
   };
 

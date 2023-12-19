@@ -12,10 +12,7 @@ import {
 import ResultComponent from '../genericComponent/ResultComponent';
 import TabsComponent from '../genericComponent/TabsComponent';
 import { searchIdInDataTabs } from './functions/helperFunctions';
-import {
-  deleteAxiosFunction,
-  getAxiosFunction,
-} from '../../genericFunctions/axiosFunctions';
+import { deleteAxiosFunction } from '../../genericFunctions/axiosFunctions';
 import { isResponceSuccess } from '../../genericFunctions/functions';
 import ConfirmationModal from '../genericComponent/ConfirmationModal';
 import AppContext from '../../Context/context';

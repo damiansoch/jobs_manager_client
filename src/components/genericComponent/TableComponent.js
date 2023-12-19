@@ -4,12 +4,11 @@ import {
   convertDateForTable,
 } from '../../genericFunctions/converters';
 import TableActionsComponent from './TableActionsComponent';
-import { useContext, useEffect } from 'react';
+import { useContext } from 'react';
 import AppContext from '../../Context/context';
 import { BiSortAlt2 } from 'react-icons/bi';
 
 const TableComponent = ({
-  data,
   excludedKeys = [],
   showActions = true,
   detailsActionFunction = undefined,

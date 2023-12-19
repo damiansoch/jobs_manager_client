@@ -108,7 +108,6 @@ const AllCustomers = () => {
             </Row>
             {customers.length > 0 && (
               <TableComponent
-                data={customers}
                 excludedKeys={excludedKeys}
                 detailsActionFunction={detailAction}
                 editActionFunction={editAction}

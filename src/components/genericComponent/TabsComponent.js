@@ -71,7 +71,6 @@ const TabsComponent = ({
               </Row>
               {Array.isArray(tabItem.data) ? (
                 <TableComponent
-                  data={tabItem.data}
                   excludedKeys={excludedKeys}
                   detailsActionFunction={detailsActionFunction}
                   editActionFunction={editActionFunction}
@@ -80,7 +79,6 @@ const TabsComponent = ({
                 />
               ) : (
                 <TableComponent
-                  data={[tabItem.data]}
                   excludedKeys={excludedKeys}
                   detailsActionFunction={detailsActionFunction}
                   editActionFunction={editActionFunction}
