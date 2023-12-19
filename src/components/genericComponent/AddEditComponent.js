@@ -31,6 +31,7 @@ import AppContext from '../../Context/context';
 const AddEditComponent = () => {
   const [newObject, setNewObject] = useState({});
   const [errors, setErrors] = useState([]);
+  const textareaItems = ['ExtraDetails', 'Description'];
 
   const { actionName, id } = useParams();
 
@@ -251,9 +252,15 @@ const AddEditComponent = () => {
         >
           {Object.keys(newObject).map((key) => (
             <Form.Group key={key}>
-              <Form.Label htmlFor={key}>{key}</Form.Label>
+              <Form.Label htmlFor={key}>{convertToLabel(key)}</Form.Label>
 
-              {renderFormControl(key, newObject[key], newObject, handleChange)}
+              {renderFormControl(
+                key,
+                newObject[key],
+                newObject,
+                handleChange,
+                textareaItems
+              )}
             </Form.Group>
           ))}
           <Button className=' my-2' type='submit' variant='primary'>

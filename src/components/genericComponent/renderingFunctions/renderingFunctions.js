@@ -1,6 +1,12 @@
 import { Form } from 'react-bootstrap';
 
-export const renderFormControl = (key, value, newObject, handleChange) => {
+export const renderFormControl = (
+  key,
+  value,
+  newObject,
+  handleChange,
+  textareaItems = undefined
+) => {
   if (typeof value === 'boolean') {
     return (
       <Form.Check
@@ -43,14 +49,28 @@ export const renderFormControl = (key, value, newObject, handleChange) => {
     );
   }
   return (
-    <Form.Control
-      type='text'
-      id={key}
-      name={key}
-      value={newObject[key] || ''}
-      onChange={(e) => {
-        handleChange(e);
-      }}
-    />
+    <>
+      {textareaItems !== undefined && textareaItems.includes(key) ? (
+        <Form.Control
+          as='textarea'
+          id={key}
+          name={key}
+          value={newObject[key] || ''}
+          onChange={(e) => {
+            handleChange(e);
+          }}
+        />
+      ) : (
+        <Form.Control
+          type='text'
+          id={key}
+          name={key}
+          value={newObject[key] || ''}
+          onChange={(e) => {
+            handleChange(e);
+          }}
+        />
+      )}
+    </>
   );
 };
