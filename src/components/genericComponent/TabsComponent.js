@@ -22,6 +22,16 @@ const TabsComponent = ({
     navigate(`/addEdit/${actionName}/${customerId}`);
   };
 
+  const tabSelectHandler = (tabItem) => {
+    let dataFotTable = [];
+    if (tabItem.title === 'Contact') {
+      dataFotTable = [tabItem.data];
+    } else {
+      dataFotTable = tabItem.data;
+    }
+    updateInitialSearchArray(dataFotTable);
+  };
+
   useEffect(() => {
     if (dataTabs.length > 0) {
       const contactData = dataTabs.filter((entry) => entry.title === 'Contact');
@@ -36,7 +46,20 @@ const TabsComponent = ({
       {dataTabs.length > 0 && (
         <Tabs defaultActiveKey='0' id='data-tabs' justify>
           {dataTabs.map((tabItem, index) => (
-            <Tab title={tabItem.title} eventKey={index.toString()} key={index}>
+            <Tab
+              title={
+                <div
+                  onClick={() => {
+                    tabSelectHandler(tabItem);
+                  }}
+                  style={{ width: '100%', height: '100%' }}
+                >
+                  {tabItem.title}
+                </div>
+              }
+              eventKey={index.toString()}
+              key={index}
+            >
               <Row>
                 {tabItem.title !== 'Contact' && (
                   <IoAdd
